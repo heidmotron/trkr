@@ -120,12 +120,27 @@ func (s *StoriesService) List(projectID int64) ([]Story, *http.Response, error) 
 		return nil, nil, err
 	}
 
-	stories := make([]Story, 0, 10)
+	stories := new([]Story)
 
 	resp, err := s.client.Do(req, stories)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return stories, resp, nil
+	return *stories, resp, nil
+}
+
+// Delete deletes an individual story
+func (s *StoriesService) Delete(id int64) (*http.Response, error) {
+	req, err := s.client.NewRequest("DELETE", fmt.Sprintf("stories/%d", id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }

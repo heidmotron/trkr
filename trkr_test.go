@@ -1,6 +1,7 @@
 package trkr
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -64,5 +65,49 @@ func TestNewRequest_badURL(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("expecting error but got nil")
+	}
+}
+
+func TestClient_Do(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, `{"name": "test"}`)
+	})
+
+	s := new(Story)
+	req, _ := client.NewRequest("GET", "/", nil)
+	resp, err := client.Do(req, s)
+
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+
+	if got, wants := resp.StatusCode, 200; got != wants {
+		t.Errorf("Status code is %v, wants %v", got, wants)
+	}
+
+	if s == nil {
+		t.Error("Object was supposed to be not nil")
+	}
+}
+
+func TestClient_DoBlank(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, ``)
+	})
+
+	req, _ := client.NewRequest("GET", "/", nil)
+	resp, err := client.Do(req, nil)
+
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+
+	if got, wants := resp.StatusCode, 200; got != wants {
+		t.Errorf("Status code is %v, wants %v", got, wants)
 	}
 }
