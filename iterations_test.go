@@ -15,7 +15,7 @@ func TestIterationsService_List(t *testing.T) {
 		fmt.Fprint(w, `[{"number": 21}]`)
 	})
 
-	is := &IterationService{client}
+	is := &IterationsService{client}
 	iterations, _, err := is.List(21, nil)
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
@@ -37,8 +37,8 @@ func TestIterationsService_ListwithOptions(t *testing.T) {
 		fmt.Fprint(w, `[{"number": 21}]`)
 	})
 
-	is := &IterationService{client}
-	opts := &IterationListOptions{Scope: "current"}
+	is := &IterationsService{client}
+	opts := &IterationsListOptions{Scope: "current"}
 
 	iterations, _, err := is.List(21, opts)
 	if err != nil {
