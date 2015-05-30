@@ -21,13 +21,13 @@ type Iteration struct {
 	Stories      []*Story   `json:"stories,omitempty"`
 }
 
-// IterationService interacts with Tracker iteration API
-type IterationService struct {
+// IterationsService interacts with Tracker iteration API
+type IterationsService struct {
 	client *Client
 }
 
-// IterationListOptions allow the Request URL to be customized
-type IterationListOptions struct {
+// IterationsListOptions allow the Request URL to be customized
+type IterationsListOptions struct {
 	Offset int    `url:"offset,omitempty"`
 	Limit  int    `url:"limit,omitempty"`
 	Label  string `url:"label,omitempty"`
@@ -35,7 +35,7 @@ type IterationListOptions struct {
 }
 
 // List returns iterations & stories that match a project ID
-func (is *IterationService) List(projectID int64, opts *IterationListOptions) ([]Iteration, *http.Response, error) {
+func (is *IterationsService) List(projectID int64, opts *IterationsListOptions) ([]Iteration, *http.Response, error) {
 	u, _ := url.Parse(fmt.Sprintf("projects/%d/iterations", projectID))
 	if opts != nil {
 		v, err := query.Values(opts)
