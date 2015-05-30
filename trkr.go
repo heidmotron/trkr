@@ -3,6 +3,7 @@ package trkr
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -67,8 +68,11 @@ func (c *Client) Do(r *http.Request, v interface{}) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer resp.Body.Close()
+
+	if c := resp.StatusCode; c < 200 && c > 299 {
+		return resp, fmt.Errorf("Status code invalid: %d", c)
+	}
 
 	if v != nil {
 		err = json.NewDecoder(resp.Body).Decode(v)
