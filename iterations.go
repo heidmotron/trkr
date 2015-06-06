@@ -30,6 +30,7 @@ type IterationsService struct {
 type IterationsListOptions struct {
 	Offset int    `url:"offset,omitempty"`
 	Limit  int    `url:"limit,omitempty"`
+	Fields string `url:"fields,omitempty"`
 	Label  string `url:"label,omitempty"`
 	Scope  string `url:"scope,omitempty"`
 }

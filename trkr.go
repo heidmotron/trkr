@@ -17,8 +17,11 @@ const (
 type Client struct {
 	client *http.Client
 
-	BaseURL *url.URL
-	Token   string
+	BaseURL           *url.URL
+	Token             string
+	IterationsService *IterationsService
+	ProjectsService   *ProjectsService
+	StoriesService    *StoriesService
 }
 
 // NewClient creates a Client with defaults
@@ -29,10 +32,15 @@ func NewClient(c *http.Client) *Client {
 		c = http.DefaultClient
 	}
 
-	return &Client{
+	client := &Client{
 		client:  c,
 		BaseURL: baseURL,
 	}
+
+	client.IterationsService = &IterationsService{client}
+	client.ProjectsService = &ProjectsService{client}
+	client.StoriesService = &StoriesService{client}
+	return client
 }
 
 // NewRequest generates an http.Request with all the correct headers filled out
